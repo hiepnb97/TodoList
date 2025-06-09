@@ -21,7 +21,6 @@
                 <h1 class="text-center mb-4">
                     <i class="fas fa-tasks text-primary"></i> Todo List
                 </h1>
-                <p class="text-muted text-center">Visit Count: ${visitCount}</p>
                 <form action="login" method="POST">
                     <div class="form-group">
                         <label for="username" class="form-label">Username</label>
@@ -49,6 +48,9 @@
                 </form>
                 <p class="error-message text-center mt-3">${requestScope.errorMessage}</p>
             </div>
+            <footer class="text-center mt-4">
+                <small class="text-muted">Visit Count: ${visitCount}</small>
+            </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

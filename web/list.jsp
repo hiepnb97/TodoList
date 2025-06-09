@@ -24,7 +24,6 @@
                     <i class="fas fa-tasks text-primary"></i> Todo List
                 </h1>
                 <div class="nav-links">
-                    <p class="text-muted mb-0">Visit Count: ${visitCount}</p>
                     <c:if test="${not empty username}">
                         <a href="add" class="btn btn-success">
                             <i class="fas fa-plus"></i> Add Todo
@@ -74,6 +73,9 @@
                     </tbody>
                 </table>
             </div>
+            <footer class="text-center mt-4">
+                <small class="text-muted">Visit Count: ${visitCount}</small>
+            </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
