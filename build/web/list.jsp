@@ -11,40 +11,70 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Todo List</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
     </head>
-    <body>
-        <h1>Todo List</h1>
-        <p>Visit Count: ${visitCount}</p>
-        <c:if test="${not empty username}">
-            <a href="add">Add new Todo</a>
-            <a href="logout">Logout</a>
-        </c:if>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Status</th>
+    <body class="bg-light">
+        <div class="container">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-tasks text-primary"></i> Todo List
+                </h1>
+                <div class="nav-links">
+                    <p class="text-muted mb-0">Visit Count: ${visitCount}</p>
                     <c:if test="${not empty username}">
-                        <th>Actions</th>
+                        <a href="add" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add Todo
+                        </a>
+                        <a href="logout" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
                     </c:if>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="todo" items="${list}">
-                <tr>
-                    <td>${todo.title}</td>
-                    <td>${todo.status ? "Done" : "Doing"}</td>
-                    <c:if test="${not empty username}">
-                        <td>
-                            <a href="edit?id=${todo.id}">Edit</a>
-                            <a href="delete?id=${todo.id}">Delete</a>
-                        </td>
-                    </c:if>
-                </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                </div>
+            </div>
 
+            <div class="table-responsive todo-table">
+                <table class="table table-hover table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <c:if test="${not empty username}">
+                                <th>Actions</th>
+                            </c:if>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="todo" items="${list}">
+                            <tr>
+                                <td>${todo.title}</td>
+                                <td>
+                                    <span class="status-badge ${todo.status ? 'status-done' : 'status-doing'}">
+                                        ${todo.status ? "Done" : "Doing"}
+                                    </span>
+                                </td>
+                                <c:if test="${not empty username}">
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="edit?id=${todo.id}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="delete?id=${todo.id}" class="btn btn-sm btn-danger" 
+                                               onclick="return confirm('Are you sure you want to delete this todo?')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </c:if>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
