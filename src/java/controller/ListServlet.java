@@ -21,44 +21,52 @@ import java.util.logging.Logger;
 import model.Todo;
 
 /**
- *
+ * ListServlet xử lý việc hiển thị danh sách các todo
+ * Servlet này chủ yếu xử lý GET request để lấy và hiển thị danh sách todo từ database
  * @author hiepn
  */
 @WebServlet(name="ListServlet", urlPatterns={"/list"})
 public class ListServlet extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
+    /**
+     * Xử lý GET request - lấy và hiển thị danh sách todo
+     * Phương thức này sẽ:
+     * 1. Lấy tất cả todo từ database
+     * 2. Đặt danh sách todo vào request attribute
+     * 3. Chuyển tiếp request đến trang JSP để hiển thị
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet xảy ra
+     * @throws IOException nếu có lỗi I/O xảy ra
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        // Tạo đối tượng TodoDAO để tương tác với database
         TodoDAO todoDAO = new TodoDAO();
         try {
+            // Lấy danh sách todo từ database
             ArrayList<Todo> list = todoDAO.getAll();
+            // Đặt danh sách vào request attribute để JSP có thể truy cập
             request.setAttribute("list", list);
             
-            // Tạo một đối tượng chuyển tiếp đến một tài nguyên nội bộ (ví dụ: JSP)
+            // Tạo một đối tượng chuyển tiếp đến trang JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("list.jsp");
-            // Chuyển yêu cầu hiện tại đến tài nguyên khác
+            // Chuyển tiếp request đến JSP
             dispatcher.forward(request, response);
         } catch (SQLException ex) {
+            // Log lỗi nếu có vấn đề khi truy cập database
             Logger.getLogger(ListServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-  
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
+    /**
+     * Xử lý POST request
+     * Hiện tại không xử lý POST request vì chức năng list chỉ cần GET
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet xảy ra
+     * @throws IOException nếu có lỗi I/O xảy ra
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,12 +75,11 @@ public class ListServlet extends HttpServlet {
     }
 
     /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
+     * Trả về mô tả ngắn về servlet
+     * @return chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "ListServlet - Hiển thị danh sách todo";
+    }
 }

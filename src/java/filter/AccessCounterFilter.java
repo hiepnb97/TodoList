@@ -22,7 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
+ * AccessCounterFilter class để đếm số lượt truy cập cho mỗi URL trong ứng dụng
+ * Filter này sẽ theo dõi và đếm số lần mỗi URL được truy cập
+ * Sử dụng ConcurrentHashMap để đảm bảo thread-safe khi nhiều request cùng truy cập
  * @author hiepn
  */
 @WebFilter(filterName="AccessCounterFilter", urlPatterns={"/*"})
@@ -39,16 +41,20 @@ public class AccessCounterFilter implements Filter {
     } 
 
     /**
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
+     * Map lưu trữ số lượt truy cập cho mỗi URL
+     * Sử dụng ConcurrentHashMap và AtomicInteger để đảm bảo thread-safe
      */
     private static final Map<String, AtomicInteger> counter = new ConcurrentHashMap<>();
     
+    /**
+     * Phương thức chính của filter để xử lý và đếm lượt truy cập
+     * Tăng số lượt truy cập cho URL hiện tại và lưu vào request attribute
+     * @param request The servlet request we are processing
+     * @param response The servlet response we are creating
+     * @param chain The filter chain we are processing
+     * @throws IOException if an input/output error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain)
 	throws IOException, ServletException {
@@ -64,29 +70,30 @@ public class AccessCounterFilter implements Filter {
     }
     
     /**
-     * Return the filter configuration object for this filter.
+     * Lấy đối tượng FilterConfig của filter này
+     * @return đối tượng FilterConfig
      */
     public FilterConfig getFilterConfig() {
 	return (this.filterConfig);
     }
 
     /**
-     * Set the filter configuration object for this filter.
-     *
-     * @param filterConfig The filter configuration object
+     * Thiết lập đối tượng FilterConfig cho filter này
+     * @param filterConfig đối tượng FilterConfig cần thiết lập
      */
     public void setFilterConfig(FilterConfig filterConfig) {
 	this.filterConfig = filterConfig;
     }
 
     /**
-     * Destroy method for this filter 
+     * Phương thức được gọi khi filter bị hủy
      */
     public void destroy() { 
     }
 
     /**
-     * Init method for this filter 
+     * Phương thức khởi tạo filter
+     * @param filterConfig đối tượng FilterConfig để khởi tạo filter
      */
     public void init(FilterConfig filterConfig) { 
 	this.filterConfig = filterConfig;
@@ -98,7 +105,8 @@ public class AccessCounterFilter implements Filter {
     }
 
     /**
-     * Return a String representation of this object.
+     * Trả về chuỗi mô tả filter
+     * @return chuỗi mô tả filter
      */
     @Override
     public String toString() {

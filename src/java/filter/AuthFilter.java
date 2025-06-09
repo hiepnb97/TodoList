@@ -21,7 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
- *
+ * AuthFilter class để xử lý việc xác thực người dùng
+ * Filter này sẽ kiểm tra session để đảm bảo người dùng đã đăng nhập
+ * trước khi cho phép truy cập vào các URL được bảo vệ
  * @author hiepn
  */
 @WebFilter(filterName="AuthFilter", urlPatterns={"/delete", "/edit", "/add"})
@@ -38,13 +40,14 @@ public class AuthFilter implements Filter {
     }
 
     /**
-     *
+     * Phương thức chính của filter để xử lý request
+     * Kiểm tra xem người dùng đã đăng nhập chưa thông qua session
+     * Nếu chưa đăng nhập sẽ chuyển hướng về trang login
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
      * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
+     * @throws IOException if an input/output error occurs
+     * @throws ServletException if a servlet error occurs
      */
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain)
@@ -52,37 +55,41 @@ public class AuthFilter implements Filter {
         
         HttpSession session = ((HttpServletRequest)request).getSession();
         
+        // Kiểm tra xem người dùng đã đăng nhập chưa
         if(session.getAttribute("username") != null) {
+            // Nếu đã đăng nhập, cho phép request đi tiếp
             chain.doFilter(request, response);
         } else {
+            // Nếu chưa đăng nhập, chuyển hướng về trang login
             ((HttpServletResponse)response).sendRedirect("login");
         }
     }
     
     /**
-     * Return the filter configuration object for this filter.
+     * Lấy đối tượng FilterConfig của filter này
+     * @return đối tượng FilterConfig
      */
     public FilterConfig getFilterConfig() {
 	return (this.filterConfig);
     }
 
     /**
-     * Set the filter configuration object for this filter.
-     *
-     * @param filterConfig The filter configuration object
+     * Thiết lập đối tượng FilterConfig cho filter này
+     * @param filterConfig đối tượng FilterConfig cần thiết lập
      */
     public void setFilterConfig(FilterConfig filterConfig) {
 	this.filterConfig = filterConfig;
     }
 
     /**
-     * Destroy method for this filter 
+     * Phương thức được gọi khi filter bị hủy
      */
     public void destroy() { 
     }
 
     /**
-     * Init method for this filter 
+     * Phương thức khởi tạo filter
+     * @param filterConfig đối tượng FilterConfig để khởi tạo filter
      */
     public void init(FilterConfig filterConfig) { 
 	this.filterConfig = filterConfig;
@@ -94,7 +101,8 @@ public class AuthFilter implements Filter {
     }
 
     /**
-     * Return a String representation of this object.
+     * Trả về chuỗi mô tả filter
+     * @return chuỗi mô tả filter
      */
     @Override
     public String toString() {
